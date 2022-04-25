@@ -43,7 +43,7 @@ const createUser = async (firstName, lastName, passwd, email) => {
 
 }
 
-//createUser('Felix', 'Bossio', 'TestPsswd123@', 'felixbossio@gmail.com')
+//createUser('Guido', 'van Rossum', 'TestPsswd123@', 'guido@gmail.com')
 
 const createCourse = async (fullname, shortname, categoryid, startdate, enddate) => {
     const formData = new FormData();
@@ -107,7 +107,7 @@ const enrolUser = async (roleid, userid, courseid) => {
     const formData = new FormData();
     const baseUrl = 'http://its.institute/webservice/rest/server.php'
     const wstoken = '9e626c185c1559237f95571ddd1275ff';
-    const wsfunction = 'core_course_create_categories';
+    const wsfunction = 'enrol_manual_enrol_users';
     const moodlewsrestformat = 'json';
 
     await formData.append('moodlewsrestformat', moodlewsrestformat);
@@ -153,7 +153,7 @@ const getCourses = async () => {
 
 //getCourses()
 
-//enrolUser(5, 10, 7);
+//enrolUser(5, 176, 7);
 
 const checkUserIn = async (email) => {
     const formData = FormData();
@@ -173,10 +173,10 @@ const checkUserIn = async (email) => {
 
         
     let response = await axios.post(baseUrl, formData, { headers: formData.getHeaders()})
-    console.log(response.data.users[0] != undefined);     
+    console.log(response.data.users[0]);     
 }
 
-//checkUserIn('felixbossio@gmail.com');
+checkUserIn('felixbossio@gmail.com');
 
 const checkCategoryIn = async (name) => {
     const formData = FormData();
@@ -226,4 +226,37 @@ const checkCourseIn = async (shortname) => {
 
 //console.log(new Date(0));
 
-console.log(typeof 0 == 'number');
+//console.log(typeof 0 == 'number');
+
+const checkEnrollmentIn = async (courseid) => {
+    const formData = FormData();
+    const wsfunction = "core_enrol_get_enrolled_users";
+
+    const baseUrl = 'http://its.institute/webservice/rest/server.php'
+    const wstoken = '9e626c185c1559237f95571ddd1275ff';   
+    const moodlewsrestformat = 'json';
+    
+    await formData.append("moodlewsrestformat", moodlewsrestformat);
+    await formData.append("wsfunction", wsfunction);
+    await formData.append("wstoken", wstoken);
+
+    await formData.append("courseid", courseid);
+    
+    const response = await axios.post(baseUrl, formData, {
+        headers: formData.getHeaders(),
+      });
+
+   
+
+    
+
+    if (response.data[0] != undefined) {
+        console.log(response.data.some(el => el.id === 10)) 
+    } else {
+        console.log(false);    
+    }
+    
+
+}
+
+//checkEnrollmentIn(7);
