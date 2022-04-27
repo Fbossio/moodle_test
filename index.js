@@ -1,6 +1,7 @@
 const axios = require('axios');
 const querystring = require('querystring');
 const FormData = require('form-data');
+const moment = require("moment")
 
 const getToken = () => {
     const username = 'admin';
@@ -153,7 +154,7 @@ const getCourses = async () => {
 
 //getCourses()
 
-//enrolUser(5, 176, 7);
+//enrolUser(4, 10, 76);
 
 const checkUserIn = async (email) => {
     const formData = FormData();
@@ -176,7 +177,7 @@ const checkUserIn = async (email) => {
     console.log(response.data.users[0]);     
 }
 
-checkUserIn('felixbossio@gmail.com');
+//checkUserIn('felixbossio@gmail.com');
 
 const checkCategoryIn = async (name) => {
     const formData = FormData();
@@ -244,9 +245,7 @@ const checkEnrollmentIn = async (courseid) => {
     
     const response = await axios.post(baseUrl, formData, {
         headers: formData.getHeaders(),
-      });
-
-   
+      }); 
 
     
 
@@ -260,3 +259,79 @@ const checkEnrollmentIn = async (courseid) => {
 }
 
 //checkEnrollmentIn(7);
+
+const getUsersEnrolledByCourseId = async (courseid) => {
+    const formData = FormData();
+    const wsfunction = "core_enrol_get_enrolled_users";
+    
+    const baseUrl = "http://its.institute/webservice/rest/server.php";
+    const wstoken = "9e626c185c1559237f95571ddd1275ff";
+    const moodlewsrestformat = "json";
+
+    await formData.append("moodlewsrestformat", moodlewsrestformat);
+    await formData.append("wsfunction", wsfunction);
+    await formData.append("wstoken", wstoken);
+
+    await formData.append("courseid", courseid);
+
+    const response = await axios.post(baseUrl, formData, {
+      headers: formData.getHeaders(),
+    });
+
+    console.log(response.data);
+    
+  }
+
+  //getUsersEnrolledByCourseId(76);
+
+  let my_obj = [
+      {
+          id: 1,
+          name: "name1",
+          lastname: "lastname1",
+          role: [{id: 4, name: "teacher"}, {id: 5, name: "student"}]
+      },
+      {
+        id: 2,
+        name: "name2",
+        lastname: "lastname2",
+        role: [{id: 5, name: "student"}]
+    },
+    {
+        id: 3,
+        name: "name3",
+        lastname: "lastname3",
+        role: [{id: 5, name: "student"}]
+    }
+  ]
+
+//console.log(my_obj.some((el) => el.id === 2));
+//let index = my_obj.findIndex((obj) => obj.id === 1);
+//let index = -1;
+//console.log(index);
+//console.log(my_obj[index])
+//console.log(my_obj[index].role.some((role) => role.id === 4));
+
+let date = "2022-04-28";
+//date = date.split("-");
+//let myDate = new Date(date[0], date[2] - 1, date[1]);
+let duration_days = 60;
+
+
+
+//console.log(end_date);
+
+let initDate = moment(date);
+let end_date = initDate.clone().add(duration_days, "days");
+
+//console.log(initDate.format())
+//console.log(end_date.format())
+
+const currentDate = new Date(initDate.format());
+const timestamp = currentDate.getTime();
+console.log(timestamp);
+console.log(typeof timestamp)
+
+
+//console.log(Date.parse(initDate.format()));
+
